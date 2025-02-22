@@ -295,5 +295,15 @@ int main(int argc, char* argv[])
 
 	RunPlannerBenchmark(killEnemy, currentState, actions);
 
+	WorldStatePrint(currentState);
+	auto plan = Plan(killEnemy, currentState, actions);
+	PlanPrint(plan);
+	
+	for (const Action& action : plan)
+	{
+		ActionApplyEffect(action, currentState);
+	}
+	WorldStatePrint(currentState);
+
 	return 0;
 }

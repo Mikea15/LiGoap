@@ -8,6 +8,16 @@
 #include "action.h"
 #include "goal.h"
 
+inline void PlanPrint(const std::vector<Action>& plan)
+{
+	std::cout << "Plan: \n";
+	for (const Action& action : plan)
+	{
+		std::cout<< " -> " << action.name;
+	}
+	std::cout << "\n";
+}
+
 std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::vector<Action>& actions)
 {
 	struct PlanNode
