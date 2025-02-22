@@ -16,7 +16,7 @@ PlannerStats BenchmarkPlanner(const Goal& goal, const WorldState& initial_state,
 	const std::vector<Action>& actions,
 	std::chrono::seconds duration = std::chrono::seconds(10))
 {
-	using clock = std::chrono::steady_clock;
+	using clock = std::chrono::high_resolution_clock;
 	const auto start_time = clock::now();
 	const auto end_time = start_time + duration;
 

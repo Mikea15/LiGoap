@@ -36,13 +36,16 @@ std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::v
 	};
 
 	std::vector<PlanNode> openList;
+	openList.reserve(50);
+	
 	std::unordered_set<std::string> closedList; // Track visited states
 
 	// Start node
 	openList.push_back({ state, {}, 0.0f + GoalDistanceToState(goal, state) });
 
 	// Reuse these vectors to avoid allocations in the loop
-	std::vector<int> newPlan;
+	std::vector<Action> newPlan;
+	newPlan.reserve(15);
 
 	while (!openList.empty())
 	{
@@ -81,7 +84,7 @@ std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::v
 				// Calculate Costs
 				const float f = current.cost + static_cast<float>(action.cost) + GoalDistanceToState(goal, newState);
 
-				std::vector<Action> newPlan = current.plan;
+				newPlan = current.plan;
 				newPlan.push_back(action);
 
 				openList.push_back({ newState, newPlan, f });
