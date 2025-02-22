@@ -36,7 +36,7 @@ std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::v
 	};
 
 	std::vector<PlanNode> openList;
-	openList.reserve(50);
+	openList.reserve(100);
 	
 	std::unordered_set<std::string> closedList; // Track visited states
 
