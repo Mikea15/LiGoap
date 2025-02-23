@@ -4,6 +4,8 @@
 
 #include <sstream>
 
+#include "types.h"
+
 struct Symbol
 {
 	union
@@ -15,11 +17,9 @@ struct Symbol
 	};
 };
 
-using symbol_map = std::unordered_map<std::string, Symbol>;
-
 struct WorldState
 {
-	std::unordered_map<std::string, bool> db;
+	key_map db;
 
 	bool operator==(const WorldState& other) const
 	{
@@ -32,7 +32,8 @@ inline std::string WorldStateToString(const WorldState& state)
 	std::stringstream ss;
 	for (const auto& kvp : state.db)
 	{
-		ss << kvp.first << ":" << kvp.second << ";";
+		// ss << kvp.first << ":" << kvp.second << ";";
+		ss << kvp.second << ";";
 	}
 	return ss.str();
 }

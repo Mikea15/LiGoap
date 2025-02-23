@@ -160,6 +160,7 @@
     <ClInclude Include="action.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="planner.h" />
+    <ClInclude Include="types.h" />
     <ClInclude Include="worldstate.h" />
   </ItemGroup>
   <ItemGroup>

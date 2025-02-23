@@ -18,23 +18,18 @@ struct Action
 		cost = inCost;
 	}
 
-	std::unordered_map<std::string, bool> pre;
-	std::unordered_map<std::string, bool> eff;
+	key_map pre;
+	key_map eff;
 	std::string name = {};
 	int cost = 0;
 };
 
-inline Action MakeAction(const std::string& name, int cost)
-{
-	return Action(name, cost);
-}
-
-inline void ActionAddPrecondition(Action& action, const std::string& name, bool value)
+inline void ActionAddPrecondition(Action& action, const key_type& name, bool value)
 {
 	action.pre.insert(std::make_pair(name, value));
 }
 
-inline void ActionAddEffect(Action& action, const std::string& name, bool value)
+inline void ActionAddEffect(Action& action, const key_type& name, bool value)
 {
 	action.eff.insert(std::make_pair(name, value));
 }
@@ -42,16 +37,16 @@ inline void ActionAddEffect(Action& action, const std::string& name, bool value)
 inline void ActionPrint(const Action& action)
 {
 	std::cout << "Name: [" << action.cost << "] " << action.name << "\n";
-	std::cout << "Preconditions: \n";
-	for (const auto& kvp : action.pre)
-	{
-		std::cout << "K: " << kvp.first << " - V: " << kvp.second << "\n";
-	}
-	std::cout << "Effects: \n";
-	for (const auto& kvp : action.eff)
-	{
-		std::cout << "K: " << kvp.first << " - V: " << kvp.second << "\n";
-	}
+	// std::cout << "Preconditions: \n";
+	// for (const auto& kvp : action.pre)
+	// {
+	// 	std::cout << "K: " << kvp.first << " - V: " << kvp.second << "\n";
+	// }
+	// std::cout << "Effects: \n";
+	// for (const auto& kvp : action.eff)
+	// {
+	// 	std::cout << "K: " << kvp.first << " - V: " << kvp.second << "\n";
+	// }
 }
 
 inline void ActionApplyEffect(const Action& action, WorldState& state)

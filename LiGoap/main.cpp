@@ -76,167 +76,167 @@ void RunPlannerBenchmark(const Goal& goal, const WorldState& initial_state, cons
 
 int main(int argc, char* argv[])
 {
-	Goal killEnemy = MakeGoal("KillEnemy");
-	GoalAddSatisfaction(killEnemy, "kTargetIsDead", true);
+	Goal killEnemy = Goal("KillEnemy");
+	GoalAddSatisfaction(killEnemy, EKeyAtom::kTargetIsDead, true);
 
-	Action attack = MakeAction("Attack", 4);
-	ActionAddPrecondition(attack, "kWeaponArmed", true);
-	ActionAddPrecondition(attack, "kWeaponLoaded", true);
-	ActionAddEffect(attack, "kTargetIsDead", true);
+	Action attack = Action("Attack", 4);
+	ActionAddPrecondition(attack, EKeyAtom::kWeaponArmed, true);
+	ActionAddPrecondition(attack, EKeyAtom::kWeaponLoaded, true);
+	ActionAddEffect(attack, EKeyAtom::kTargetIsDead, true);
 
-	Action attackFromCover = MakeAction("AttackFromCover", 1);
-	ActionAddPrecondition(attackFromCover, "kHasCover", true);
-	ActionAddPrecondition(attackFromCover, "kWeaponArmed", true);
-	ActionAddPrecondition(attackFromCover, "kWeaponLoaded", true);
-	ActionAddEffect(attackFromCover, "kTargetIsDead", true);
+	Action attackFromCover = Action("AttackFromCover", 1);
+	ActionAddPrecondition(attackFromCover, EKeyAtom::kHasCover, true);
+	ActionAddPrecondition(attackFromCover, EKeyAtom::kWeaponArmed, true);
+	ActionAddPrecondition(attackFromCover, EKeyAtom::kWeaponLoaded, true);
+	ActionAddEffect(attackFromCover, EKeyAtom::kTargetIsDead, true);
 
-	Action attackFromVehicle = MakeAction("AttackFromVehicle", 1);
-	ActionAddPrecondition(attackFromVehicle, "kAtObject", true);
-	ActionAddPrecondition(attackFromVehicle, "kWeaponArmed", true);
-	ActionAddPrecondition(attackFromVehicle, "kWeaponLoaded", true);
-	ActionAddEffect(attackFromVehicle, "kTargetIsDead", true);
+	Action attackFromVehicle = Action("AttackFromVehicle", 1);
+	ActionAddPrecondition(attackFromVehicle, EKeyAtom::kAtObject, true);
+	ActionAddPrecondition(attackFromVehicle, EKeyAtom::kWeaponArmed, true);
+	ActionAddPrecondition(attackFromVehicle, EKeyAtom::kWeaponLoaded, true);
+	ActionAddEffect(attackFromVehicle, EKeyAtom::kTargetIsDead, true);
 
-	Action goTo = MakeAction("GoTo", 2);
-	ActionAddPrecondition(goTo, "kDestination", true);
-	ActionAddEffect(goTo, "kAtObject", true);
+	Action goTo = Action("GoTo", 2);
+	ActionAddPrecondition(goTo, EKeyAtom::kDestination, true);
+	ActionAddEffect(goTo, EKeyAtom::kAtObject, true);
 
-	Action useObject = MakeAction("UseObject", 2);
-	ActionAddPrecondition(useObject, "kAtObject", true);
-	ActionAddEffect(useObject, "kHasCover", true); // flips object to the side to create cover.
+	Action useObject = Action("UseObject", 2);
+	ActionAddPrecondition(useObject, EKeyAtom::kAtObject, true);
+	ActionAddEffect(useObject, EKeyAtom::kHasCover, true); // flips object to the side to create cover.
 
-	Action equipWeapon = MakeAction("EquipWeapon", 1);
-	ActionAddEffect(equipWeapon, "kWeaponArmed", true);
+	Action equipWeapon = Action("EquipWeapon", 1);
+	ActionAddEffect(equipWeapon, EKeyAtom::kWeaponArmed, true);
 
-	Action reloadWeapon = MakeAction("ReloadWeapon", 1);
-	ActionAddPrecondition(reloadWeapon, "kWeaponArmed", true);
-	ActionAddEffect(reloadWeapon, "kWeaponLoaded", true);
+	Action reloadWeapon = Action("ReloadWeapon", 1);
+	ActionAddPrecondition(reloadWeapon, EKeyAtom::kWeaponArmed, true);
+	ActionAddEffect(reloadWeapon, EKeyAtom::kWeaponLoaded, true);
 
 	// Basic movement and positioning actions
-	Action sprint = MakeAction("Sprint", 3);
-	ActionAddEffect(sprint, "kAtLocation", true);
-	ActionAddEffect(sprint, "kStamina", false);
+	Action sprint = Action("Sprint", 3);
+	ActionAddEffect(sprint, EKeyAtom::kAtLocation, true);
+	ActionAddEffect(sprint, EKeyAtom::kStamina, false);
 
-	Action walk = MakeAction("Walk", 5);
-	ActionAddEffect(walk, "kAtLocation", true);
+	Action walk = Action("Walk", 5);
+	ActionAddEffect(walk, EKeyAtom::kAtLocation, true);
 
-	Action crouch = MakeAction("Crouch", 1);
-	ActionAddEffect(crouch, "kIsCrouched", true);
-	ActionAddEffect(crouch, "kIsStealthy", true);
+	Action crouch = Action("Crouch", 1);
+	ActionAddEffect(crouch, EKeyAtom::kIsCrouched, true);
+	ActionAddEffect(crouch, EKeyAtom::kIsStealthy, true);
 
-	Action prone = MakeAction("Prone", 2);
-	ActionAddEffect(prone, "kIsProne", true);
-	ActionAddEffect(prone, "kIsStealthy", true);
-	ActionAddEffect(prone, "kAccuracyIncreased", true);
+	Action prone = Action("Prone", 2);
+	ActionAddEffect(prone, EKeyAtom::kIsProne, true);
+	ActionAddEffect(prone, EKeyAtom::kIsStealthy, true);
+	ActionAddEffect(prone, EKeyAtom::kAccuracyIncreased, true);
 
 	// Cover and stealth actions
-	Action findCover = MakeAction("FindCover", 2);
-	ActionAddPrecondition(findCover, "kAtLocation", true);
-	ActionAddEffect(findCover, "kHasCover", true);
+	Action findCover = Action("FindCover", 2);
+	ActionAddPrecondition(findCover, EKeyAtom::kAtLocation, true);
+	ActionAddEffect(findCover, EKeyAtom::kHasCover, true);
 
-	Action enterBuilding = MakeAction("EnterBuilding", 3);
-	ActionAddPrecondition(enterBuilding, "kAtLocation", true);
-	ActionAddEffect(enterBuilding, "kInsideBuilding", true);
-	ActionAddEffect(enterBuilding, "kHasCover", true);
+	Action enterBuilding = Action("EnterBuilding", 3);
+	ActionAddPrecondition(enterBuilding, EKeyAtom::kAtLocation, true);
+	ActionAddEffect(enterBuilding, EKeyAtom::kInsideBuilding, true);
+	ActionAddEffect(enterBuilding, EKeyAtom::kHasCover, true);
 
-	Action climbVantagePoint = MakeAction("ClimbVantagePoint", 4);
-	ActionAddPrecondition(climbVantagePoint, "kAtLocation", true);
-	ActionAddPrecondition(climbVantagePoint, "kStamina", true);
-	ActionAddEffect(climbVantagePoint, "kHasHighGround", true);
-	ActionAddEffect(climbVantagePoint, "kAccuracyIncreased", true);
+	Action climbVantagePoint = Action("ClimbVantagePoint", 4);
+	ActionAddPrecondition(climbVantagePoint, EKeyAtom::kAtLocation, true);
+	ActionAddPrecondition(climbVantagePoint, EKeyAtom::kStamina, true);
+	ActionAddEffect(climbVantagePoint, EKeyAtom::kHasHighGround, true);
+	ActionAddEffect(climbVantagePoint, EKeyAtom::kAccuracyIncreased, true);
 
 	// Weapon handling actions
-	Action switchToSidearm = MakeAction("SwitchToSidearm", 1);
-	ActionAddEffect(switchToSidearm, "kWeaponArmed", true);
-	ActionAddEffect(switchToSidearm, "kUsingPistol", true);
+	Action switchToSidearm = Action("SwitchToSidearm", 1);
+	ActionAddEffect(switchToSidearm, EKeyAtom::kWeaponArmed, true);
+	ActionAddEffect(switchToSidearm, EKeyAtom::kUsingPistol, true);
 
-	Action switchToRifle = MakeAction("SwitchToRifle", 2);
-	ActionAddPrecondition(switchToRifle, "kHasRifle", true);
-	ActionAddEffect(switchToRifle, "kWeaponArmed", true);
-	ActionAddEffect(switchToRifle, "kUsingRifle", true);
+	Action switchToRifle = Action("SwitchToRifle", 2);
+	ActionAddPrecondition(switchToRifle, EKeyAtom::kHasRifle, true);
+	ActionAddEffect(switchToRifle, EKeyAtom::kWeaponArmed, true);
+	ActionAddEffect(switchToRifle, EKeyAtom::kUsingRifle, true);
 
-	Action switchToSniper = MakeAction("SwitchToSniper", 2);
-	ActionAddPrecondition(switchToSniper, "kHasSniper", true);
-	ActionAddEffect(switchToSniper, "kWeaponArmed", true);
-	ActionAddEffect(switchToSniper, "kUsingSniper", true);
+	Action switchToSniper = Action("SwitchToSniper", 2);
+	ActionAddPrecondition(switchToSniper, EKeyAtom::kHasSniper, true);
+	ActionAddEffect(switchToSniper, EKeyAtom::kWeaponArmed, true);
+	ActionAddEffect(switchToSniper, EKeyAtom::kUsingSniper, true);
 
-	Action reloadPistol = MakeAction("ReloadPistol", 2);
-	ActionAddPrecondition(reloadPistol, "kUsingPistol", true);
-	ActionAddPrecondition(reloadPistol, "kHasPistolAmmo", true);
-	ActionAddEffect(reloadPistol, "kWeaponLoaded", true);
+	Action reloadPistol = Action("ReloadPistol", 2);
+	ActionAddPrecondition(reloadPistol, EKeyAtom::kUsingPistol, true);
+	ActionAddPrecondition(reloadPistol, EKeyAtom::kHasPistolAmmo, true);
+	ActionAddEffect(reloadPistol, EKeyAtom::kWeaponLoaded, true);
 
-	Action reloadRifle = MakeAction("ReloadRifle", 3);
-	ActionAddPrecondition(reloadRifle, "kUsingRifle", true);
-	ActionAddPrecondition(reloadRifle, "kHasRifleAmmo", true);
-	ActionAddEffect(reloadRifle, "kWeaponLoaded", true);
+	Action reloadRifle = Action("ReloadRifle", 3);
+	ActionAddPrecondition(reloadRifle, EKeyAtom::kUsingRifle, true);
+	ActionAddPrecondition(reloadRifle, EKeyAtom::kHasRifleAmmo, true);
+	ActionAddEffect(reloadRifle, EKeyAtom::kWeaponLoaded, true);
 
-	Action reloadSniper = MakeAction("ReloadSniper", 4);
-	ActionAddPrecondition(reloadSniper, "kUsingSniper", true);
-	ActionAddPrecondition(reloadSniper, "kHasSniperAmmo", true);
-	ActionAddEffect(reloadSniper, "kWeaponLoaded", true);
+	Action reloadSniper = Action("ReloadSniper", 4);
+	ActionAddPrecondition(reloadSniper, EKeyAtom::kUsingSniper, true);
+	ActionAddPrecondition(reloadSniper, EKeyAtom::kHasSniperAmmo, true);
+	ActionAddEffect(reloadSniper, EKeyAtom::kWeaponLoaded, true);
 
 	// Combat actions
-	Action quickShot = MakeAction("QuickShot", 3);
-	ActionAddPrecondition(quickShot, "kWeaponArmed", true);
-	ActionAddPrecondition(quickShot, "kWeaponLoaded", true);
-	ActionAddEffect(quickShot, "kTargetIsDead", true);
-	ActionAddEffect(quickShot, "kWeaponLoaded", false);
+	Action quickShot = Action("QuickShot", 3);
+	ActionAddPrecondition(quickShot, EKeyAtom::kWeaponArmed, true);
+	ActionAddPrecondition(quickShot, EKeyAtom::kWeaponLoaded, true);
+	ActionAddEffect(quickShot, EKeyAtom::kTargetIsDead, true);
+	ActionAddEffect(quickShot, EKeyAtom::kWeaponLoaded, false);
 
-	Action aimedShot = MakeAction("AimedShot", 5);
-	ActionAddPrecondition(aimedShot, "kWeaponArmed", true);
-	ActionAddPrecondition(aimedShot, "kWeaponLoaded", true);
-	ActionAddPrecondition(aimedShot, "kAccuracyIncreased", true);
-	ActionAddEffect(aimedShot, "kTargetIsDead", true);
-	ActionAddEffect(aimedShot, "kWeaponLoaded", false);
+	Action aimedShot = Action("AimedShot", 5);
+	ActionAddPrecondition(aimedShot, EKeyAtom::kWeaponArmed, true);
+	ActionAddPrecondition(aimedShot, EKeyAtom::kWeaponLoaded, true);
+	ActionAddPrecondition(aimedShot, EKeyAtom::kAccuracyIncreased, true);
+	ActionAddEffect(aimedShot, EKeyAtom::kTargetIsDead, true);
+	ActionAddEffect(aimedShot, EKeyAtom::kWeaponLoaded, false);
 
-	Action sniperShot = MakeAction("SniperShot", 6);
-	ActionAddPrecondition(sniperShot, "kUsingSniper", true);
-	ActionAddPrecondition(sniperShot, "kWeaponLoaded", true);
-	ActionAddPrecondition(sniperShot, "kHasHighGround", true);
-	ActionAddEffect(sniperShot, "kTargetIsDead", true);
-	ActionAddEffect(sniperShot, "kWeaponLoaded", false);
+	Action sniperShot = Action("SniperShot", 6);
+	ActionAddPrecondition(sniperShot, EKeyAtom::kUsingSniper, true);
+	ActionAddPrecondition(sniperShot, EKeyAtom::kWeaponLoaded, true);
+	ActionAddPrecondition(sniperShot, EKeyAtom::kHasHighGround, true);
+	ActionAddEffect(sniperShot, EKeyAtom::kTargetIsDead, true);
+	ActionAddEffect(sniperShot, EKeyAtom::kWeaponLoaded, false);
 
 	// Equipment actions
-	Action searchForAmmo = MakeAction("SearchForAmmo", 4);
-	ActionAddEffect(searchForAmmo, "kHasPistolAmmo", true);
-	ActionAddEffect(searchForAmmo, "kHasRifleAmmo", true);
+	Action searchForAmmo = Action("SearchForAmmo", 4);
+	ActionAddEffect(searchForAmmo, EKeyAtom::kHasPistolAmmo, true);
+	ActionAddEffect(searchForAmmo, EKeyAtom::kHasRifleAmmo, true);
 
-	Action findRifle = MakeAction("FindRifle", 3);
-	ActionAddEffect(findRifle, "kHasRifle", true);
+	Action findRifle = Action("FindRifle", 3);
+	ActionAddEffect(findRifle, EKeyAtom::kHasRifle, true);
 
-	Action findSniper = MakeAction("FindSniper", 5);
-	ActionAddEffect(findSniper, "kHasSniper", true);
+	Action findSniper = Action("FindSniper", 5);
+	ActionAddEffect(findSniper, EKeyAtom::kHasSniper, true);
 
-	Action useStim = MakeAction("UseStim", 2);
-	ActionAddEffect(useStim, "kStamina", true);
+	Action useStim = Action("UseStim", 2);
+	ActionAddEffect(useStim, EKeyAtom::kStamina, true);
 
 	// Vehicle actions
-	Action enterVehicle = MakeAction("EnterVehicle", 2);
-	ActionAddPrecondition(enterVehicle, "kAtLocation", true);
-	ActionAddEffect(enterVehicle, "kInVehicle", true);
-	ActionAddEffect(enterVehicle, "kHasCover", true);
+	Action enterVehicle = Action("EnterVehicle", 2);
+	ActionAddPrecondition(enterVehicle, EKeyAtom::kAtLocation, true);
+	ActionAddEffect(enterVehicle, EKeyAtom::kInVehicle, true);
+	ActionAddEffect(enterVehicle, EKeyAtom::kHasCover, true);
 
-	Action startVehicle = MakeAction("StartVehicle", 1);
-	ActionAddPrecondition(startVehicle, "kInVehicle", true);
-	ActionAddEffect(startVehicle, "kVehicleRunning", true);
+	Action startVehicle = Action("StartVehicle", 1);
+	ActionAddPrecondition(startVehicle, EKeyAtom::kInVehicle, true);
+	ActionAddEffect(startVehicle, EKeyAtom::kVehicleRunning, true);
 
-	Action driveVehicle = MakeAction("DriveVehicle", 3);
-	ActionAddPrecondition(driveVehicle, "kInVehicle", true);
-	ActionAddPrecondition(driveVehicle, "kVehicleRunning", true);
-	ActionAddEffect(driveVehicle, "kAtLocation", true);
+	Action driveVehicle = Action("DriveVehicle", 3);
+	ActionAddPrecondition(driveVehicle, EKeyAtom::kInVehicle, true);
+	ActionAddPrecondition(driveVehicle, EKeyAtom::kVehicleRunning, true);
+	ActionAddEffect(driveVehicle, EKeyAtom::kAtLocation, true);
 
 	// Support actions
-	Action callSupport = MakeAction("CallSupport", 4);
-	ActionAddPrecondition(callSupport, "kHasRadio", true);
-	ActionAddEffect(callSupport, "kSupportAvailable", true);
+	Action callSupport = Action("CallSupport", 4);
+	ActionAddPrecondition(callSupport, EKeyAtom::kHasRadio, true);
+	ActionAddEffect(callSupport, EKeyAtom::kSupportAvailable, true);
 
-	Action markTarget = MakeAction("MarkTarget", 2);
-	ActionAddPrecondition(markTarget, "kHasHighGround", true);
-	ActionAddEffect(markTarget, "kTargetMarked", true);
+	Action markTarget = Action("MarkTarget", 2);
+	ActionAddPrecondition(markTarget, EKeyAtom::kHasHighGround, true);
+	ActionAddEffect(markTarget, EKeyAtom::kTargetMarked, true);
 
-	Action callAirstrike = MakeAction("CallAirstrike", 8);
-	ActionAddPrecondition(callAirstrike, "kSupportAvailable", true);
-	ActionAddPrecondition(callAirstrike, "kTargetMarked", true);
-	ActionAddEffect(callAirstrike, "kTargetIsDead", true);
+	Action callAirstrike = Action("CallAirstrike", 8);
+	ActionAddPrecondition(callAirstrike, EKeyAtom::kSupportAvailable, true);
+	ActionAddPrecondition(callAirstrike, EKeyAtom::kTargetMarked, true);
+	ActionAddEffect(callAirstrike, EKeyAtom::kTargetIsDead, true);
 
 	// Put all actions in the vector
 	std::vector<Action> actions = {
@@ -277,21 +277,21 @@ int main(int argc, char* argv[])
 	};
 
 	WorldState currentState;
-	currentState.db["kTargetIsDead"] = false;
-	currentState.db["kWeaponArmed"] = false;
-	currentState.db["kWeaponLoaded"] = false;
-	currentState.db["kAtLocation"] = false;
-	currentState.db["kStamina"] = true;
-	currentState.db["kHasRadio"] = true;
-	currentState.db["kHasPistolAmmo"] = true;
-	currentState.db["kHasRifleAmmo"] = false;
-	currentState.db["kHasSniperAmmo"] = false;
-	currentState.db["kHasRifle"] = false;
-	currentState.db["kHasSniper"] = false;
-	currentState.db["kAccuracyIncreased"] = false;
-	currentState.db["kHasHighGround"] = false;
-	currentState.db["kHasCover"] = false;
-	currentState.db["kIsStealthy"] = false;
+	currentState.db[EKeyAtom::kTargetIsDead] = false;
+	currentState.db[EKeyAtom::kWeaponArmed] = false;
+	currentState.db[EKeyAtom::kWeaponLoaded] = false;
+	currentState.db[EKeyAtom::kAtLocation] = false;
+	currentState.db[EKeyAtom::kStamina] = true;
+	currentState.db[EKeyAtom::kHasRadio] = true;
+	currentState.db[EKeyAtom::kHasPistolAmmo] = true;
+	currentState.db[EKeyAtom::kHasRifleAmmo] = false;
+	currentState.db[EKeyAtom::kHasSniperAmmo] = false;
+	currentState.db[EKeyAtom::kHasRifle] = false;
+	currentState.db[EKeyAtom::kHasSniper] = false;
+	currentState.db[EKeyAtom::kAccuracyIncreased] = false;
+	currentState.db[EKeyAtom::kHasHighGround] = false;
+	currentState.db[EKeyAtom::kHasCover] = false;
+	currentState.db[EKeyAtom::kIsStealthy] = false;
 
 	RunPlannerBenchmark(killEnemy, currentState, actions);
 

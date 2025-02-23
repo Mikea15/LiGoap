@@ -4,22 +4,19 @@
 #include <string>
 #include <unordered_map>
 
+#include "types.h"
+
 // GOAL: Describes desired state
 struct Goal
 {
 	Goal() = default;
 	explicit Goal(const std::string& inName) { name = inName; }
 
-	std::unordered_map<std::string, bool> satisfactions;
+	key_map satisfactions;
 	std::string name = {};
 };
 
-inline Goal MakeGoal(const std::string& name)
-{
-	return Goal(name);
-}
-
-inline void GoalAddSatisfaction(Goal& goal, const std::string& key, bool value)
+inline void GoalAddSatisfaction(Goal& goal, const key_type& key, bool value)
 {
 	goal.satisfactions.insert(std::make_pair(key, value));
 }
