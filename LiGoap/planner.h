@@ -38,9 +38,9 @@ std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::v
 	};
 
 	std::vector<PlanNode> openList;
-	openList.reserve(750);
+	openList.reserve(900);
 	
-	std::unordered_set<uint64_t> closedList; // Track visited states
+	std::unordered_set<std::string> closedList; // Track visited states
 
 	// Start node
 	openList.push_back({ state, {}, 0.0f, 0.0, GoalDistanceToState(goal, state) });
