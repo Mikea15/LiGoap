@@ -21,8 +21,7 @@ struct WorldState
 {
 	key_map db;
 
-	bool operator==(const WorldState& other) const
-	{
+	bool operator==(const WorldState& other) const {
 		return db == other.db;
 	}
 };

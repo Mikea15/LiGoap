@@ -5,6 +5,7 @@
 #include <random>
 
 #include "planner.h"
+#include "stringhash.h"
 
 struct PlannerStats
 {

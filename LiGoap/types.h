@@ -36,6 +36,26 @@ enum class EKeyAtom : unsigned long {
 	Count
 };
 
+struct Fact
+{
+	EKeyAtom Key;
+	bool value;
+
+	inline bool operator==(const Fact& Other) const { return Key == Other.Key; } 
+};
+
+namespace std
+{
+	template<>
+	struct hash<Fact>
+	{
+		size_t operator()(const Fact& fact) const noexcept
+		{
+			return hash<unsigned long>()(static_cast<unsigned long>(fact.Key));
+		}
+	};
+}
+
 
 using key_type = EKeyAtom;
 using key_map = std::unordered_map<key_type, bool>;

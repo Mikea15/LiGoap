@@ -18,8 +18,6 @@ inline void PlanPrint(const std::vector<Action>& plan)
 	std::cout << "\n";
 }
 
-
-
 std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::vector<Action>& actions)
 {
 	struct PlanNode
@@ -40,9 +38,9 @@ std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::v
 	};
 
 	std::vector<PlanNode> openList;
-	openList.reserve(150);
+	openList.reserve(750);
 	
-	std::unordered_set<std::string> closedList; // Track visited states
+	std::unordered_set<uint64_t> closedList; // Track visited states
 
 	// Start node
 	openList.push_back({ state, {}, 0.0f, 0.0, GoalDistanceToState(goal, state) });

@@ -24,14 +24,14 @@ struct Action
 	int cost = 0;
 };
 
-inline void ActionAddPrecondition(Action& action, const key_type& name, bool value)
+inline void ActionAddPrecondition(Action& action, const key_type& key, bool value)
 {
-	action.pre.insert(std::make_pair(name, value));
+	action.pre.insert({ key, value });
 }
 
-inline void ActionAddEffect(Action& action, const key_type& name, bool value)
+inline void ActionAddEffect(Action& action, const key_type& key, bool value)
 {
-	action.eff.insert(std::make_pair(name, value));
+	action.eff.insert({ key, value });
 }
 
 inline void ActionPrint(const Action& action)
