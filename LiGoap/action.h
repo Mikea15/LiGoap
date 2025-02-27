@@ -8,8 +8,19 @@
 
 #include "worldstate.h"
 
+struct NoCopy
+{
+protected:
+	NoCopy() = default;
+	~NoCopy() = default;
+
+private:
+	NoCopy(const NoCopy&) = delete;
+	NoCopy& operator=(const NoCopy&) = delete;
+};
+
 // ACTION: Describes preconditions and effects
-struct Action
+struct Action : NoCopy
 {
 	Action() = default;
 	explicit Action(const std::string& inName, int inCost)
@@ -17,6 +28,9 @@ struct Action
 		name = inName;
 		cost = inCost;
 	}
+	// Allow move.
+	Action(Action&& Move) = default;
+	Action& operator=(Action&& Move) = default;
 
 	key_map pre;
 	key_map eff;

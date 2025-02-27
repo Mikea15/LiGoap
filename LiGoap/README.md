@@ -9,6 +9,9 @@ A journey implementing a simple c GOAP
 | Using scratch vector for reuse and reserving vector space to minimize growth/copies | 9.8 plans /s | 147 plans /s |
 | Replaced String keys for Enums, removing all string compares                        |  47 plans /s | 698 plans /s |
 | Gathered data for open list average size and increased reserved space               |  51 plans /s | 873 plans /s |
+| Prevent Copy of Actions. Use array of pointers. Prevent allocations.                |  84 plans /s | 1330 plans /s|
+
+
 
 
 

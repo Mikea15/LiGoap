@@ -8,22 +8,22 @@
 #include "action.h"
 #include "goal.h"
 
-inline void PlanPrint(const std::vector<Action>& plan)
+inline void PlanPrint(const std::vector<Action*>& plan)
 {
 	std::cout << "Plan: \n";
-	for (const Action& action : plan)
+	for (const Action* action : plan)
 	{
-		std::cout<< " -> " << action.name;
+		std::cout<< " -> " << action->name;
 	}
 	std::cout << "\n";
 }
 
-std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::vector<Action>& actions)
+std::vector<Action*> Plan(const Goal& goal, const WorldState& state, const std::vector<Action*>& actions)
 {
 	struct PlanNode
 	{
+		std::vector<Action*> plan;
 		WorldState state;
-		std::vector<Action> plan;
 		float g; // current plan
 		float h; // heuristic
 		float f; // total
@@ -38,15 +38,17 @@ std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::v
 	};
 
 	std::vector<PlanNode> openList;
-	openList.reserve(900);
+	openList.reserve(1000);
 	
 	std::unordered_set<std::string> closedList; // Track visited states
 
 	// Start node
-	openList.push_back({ state, {}, 0.0f, 0.0, GoalDistanceToState(goal, state) });
+	openList.push_back({
+		{}, state, 0.0f, 0.0, GoalDistanceToState(goal, state)
+	});
 
 	// Reuse these vectors to avoid allocations in the loop
-	std::vector<Action> newPlan;
+	std::vector<Action*> newPlan;
 	newPlan.reserve(15);
 
 	while (!openList.empty())
@@ -74,23 +76,23 @@ std::vector<Action> Plan(const Goal& goal, const WorldState& state, const std::v
 		// Try each action
 		for (size_t i = 0; i < actions.size(); ++i)
 		{
-			const Action& action = actions[i];
-			if (ActionMeetsPreconditions(action, current.state))
+			Action* action = actions[i];
+			if (ActionMeetsPreconditions(*action, current.state))
 			{
 				// Create new state
 				WorldState newState = current.state;
 
 				// Apply Action effects to new state
-				ActionApplyEffect(action, newState);
+				ActionApplyEffect(*action, newState);
 
 				// Calculate Costs
-				const float g =  current.g + static_cast<float>(action.cost); // current + movement/action cost
+				const float g =  current.g + static_cast<float>(action->cost); // current + movement/action cost
 				const float h = GoalDistanceToState(goal, newState);
 
 				newPlan = current.plan;
 				newPlan.push_back(action);
 
-				openList.push_back({ newState, newPlan, g, h, g + h });
+				openList.push_back({ newPlan, newState, g, h, g + h });
 			}
 		}
 	}

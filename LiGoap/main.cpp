@@ -7,6 +7,8 @@
 #include "planner.h"
 #include "stringhash.h"
 
+#define TEST_TIME 10
+
 struct PlannerStats
 {
 	size_t total_plans;
@@ -14,8 +16,8 @@ struct PlannerStats
 };
 
 PlannerStats BenchmarkPlanner(const Goal& goal, const WorldState& initial_state,
-	const std::vector<Action>& actions,
-	std::chrono::seconds duration = std::chrono::seconds(10))
+	const std::vector<Action*>& actions,
+	std::chrono::seconds duration = std::chrono::seconds(TEST_TIME))
 {
 	using clock = std::chrono::high_resolution_clock;
 	const auto start_time = clock::now();
@@ -37,14 +39,15 @@ PlannerStats BenchmarkPlanner(const Goal& goal, const WorldState& initial_state,
 		std::uniform_real_distribution<> noise(-0.1, 0.1);
 
 		// Modify action costs slightly to explore different paths
-		std::vector<Action> temp_actions;
+		std::vector<Action*> temp_actions;
 		temp_actions.reserve(actions.size());
 
 		for (const auto& action : actions)
 		{
-			auto action_copy = action;
-			action_copy.cost += noise(gen);
-			temp_actions.push_back(action_copy);
+			Action* newAction = new Action(action->name, action->cost + noise(gen));
+			newAction->eff = action->eff;
+			newAction->pre = action->pre;
+			temp_actions.push_back(newAction);
 		}
 
 		// Try to find a plan
@@ -65,7 +68,7 @@ PlannerStats BenchmarkPlanner(const Goal& goal, const WorldState& initial_state,
 	};
 }
 
-void RunPlannerBenchmark(const Goal& goal, const WorldState& initial_state, const std::vector<Action>& actions)
+void RunPlannerBenchmark(const Goal& goal, const WorldState& initial_state, const std::vector<Action*>& actions)
 {
 	auto stats = BenchmarkPlanner(goal, initial_state, actions);
 
@@ -240,42 +243,41 @@ int main(int argc, char* argv[])
 	ActionAddEffect(callAirstrike, EKeyAtom::kTargetIsDead, true);
 
 	// Put all actions in the vector
-	std::vector<Action> actions = {
-		sprint,
-		walk,
-		crouch,
-		prone,
-		findCover,
-		enterBuilding,
-		climbVantagePoint,
-		switchToSidearm,
-		switchToRifle,
-		switchToSniper,
-		reloadPistol,
-		reloadRifle,
-		reloadSniper,
-		quickShot,
-		aimedShot,
-		sniperShot,
-		searchForAmmo,
-		findRifle,
-		findSniper,
-		useStim,
-		enterVehicle,
-		startVehicle,
-		driveVehicle,
-		callSupport,
-		markTarget,
-		callAirstrike,
-		// me
-		attackFromCover,
-		attack,
-		attackFromVehicle,
-		goTo,
-		useObject,
-		equipWeapon,
-		reloadWeapon
-	};
+	std::vector<Action*> actions;
+	actions.push_back(&sprint);
+	actions.push_back(&walk);
+	actions.push_back(&crouch);
+	actions.push_back(&prone);
+	actions.push_back(&findCover);
+	actions.push_back(&enterBuilding);
+	actions.push_back(&climbVantagePoint);
+	actions.push_back(&switchToSidearm);
+	actions.push_back(&switchToRifle);
+	actions.push_back(&switchToSniper);
+	actions.push_back(&reloadPistol);
+	actions.push_back(&reloadRifle);
+	actions.push_back(&reloadSniper);
+	actions.push_back(&quickShot);
+	actions.push_back(&aimedShot);
+	actions.push_back(&sniperShot);
+	actions.push_back(&searchForAmmo);
+	actions.push_back(&findRifle);
+	actions.push_back(&findSniper);
+	actions.push_back(&useStim);
+	actions.push_back(&enterVehicle);
+	actions.push_back(&startVehicle);
+	actions.push_back(&driveVehicle);
+	actions.push_back(&callSupport);
+	actions.push_back(&markTarget);
+	actions.push_back(&callAirstrike);
+	// me
+	actions.push_back(&attackFromCover);
+	actions.push_back(&attack);
+	actions.push_back(&attackFromVehicle);
+	actions.push_back(&goTo);
+	actions.push_back(&useObject);
+	actions.push_back(&equipWeapon);
+	actions.push_back(&reloadWeapon);
 
 	WorldState currentState;
 	currentState.db[EKeyAtom::kTargetIsDead] = false;
@@ -297,12 +299,12 @@ int main(int argc, char* argv[])
 	RunPlannerBenchmark(killEnemy, currentState, actions);
 
 	WorldStatePrint(currentState);
-	auto plan = Plan(killEnemy, currentState, actions);
+	std::vector<Action*> plan = Plan(killEnemy, currentState, actions);
 	PlanPrint(plan);
 	
-	for (const Action& action : plan)
+	for (const Action* action : plan)
 	{
-		ActionApplyEffect(action, currentState);
+		ActionApplyEffect(*action, currentState);
 	}
 	WorldStatePrint(currentState);
 
