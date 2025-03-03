@@ -19,25 +19,67 @@ struct Symbol
 
 struct WorldState
 {
-	key_map db;
+	// Bit Position; KeyAtom
+	// Bit Value; Bool
+	uint64_t stateBits;
 
-	bool operator==(const WorldState& other) const {
-		return db == other.db;
-	}
+	bool operator==(const WorldState& other) const { return stateBits == other.stateBits; }
 };
 
-inline std::string WorldStateToString(const WorldState& state)
+inline void WorldStateInit(WorldState& state)
 {
-	std::stringstream ss;
-	for (const auto& kvp : state.db)
+	state.stateBits = 0;
+}
+
+inline void WorldStateSetBit(WorldState& state, EKeyAtom key)
+{
+	state.stateBits |= (1ull << static_cast<uint64_t>(key));
+}
+
+inline void WorldStateClearBit(WorldState& state, EKeyAtom key)
+{
+	state.stateBits &= ~(1ull << static_cast<uint64_t>(key));
+}
+
+inline void WorldStateWriteBit(WorldState& state, EKeyAtom key, bool value)
+{
+	if (value)
 	{
-		// ss << kvp.first << ":" << kvp.second << ";";
-		ss << kvp.second << ";";
+		WorldStateSetBit(state, key);
 	}
-	return ss.str();
+	else
+	{
+		WorldStateClearBit(state, key);
+	}
+}
+
+inline bool WorldStateReadBit(const WorldState& state, EKeyAtom key)
+{
+	return (state.stateBits & (1ull << static_cast<uint64_t>(key))) != 0;
 }
 
 inline void WorldStatePrint(const WorldState& state)
 {
-	std::cout << "WorldState: \n" << WorldStateToString(state) << "\n";
+	std::cout << "World State: \n";
+	std::cout << "64th Key |--- ---| 0th Key\n";
+	
+	// Print the bits from most significant to least significant
+	for (int i = 63; i >= 0; i--) {
+		printf("%d", (state.stateBits & (1ULL << i)) ? 1 : 0);
+        
+		// Add a space every 8 bits for readability
+		if (i % 8 == 0 && i > 0) {
+			printf(" ");
+		}
+	}
+	printf("\n");
 }
+
+template<>
+struct std::hash<WorldState>
+{
+	size_t operator()(const WorldState& state) const noexcept
+	{
+		return state.stateBits;
+	}
+};

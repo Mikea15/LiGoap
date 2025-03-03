@@ -26,8 +26,7 @@ inline float GoalDistanceToState(const Goal& goal, const WorldState& state)
 	float distance = 0.0f;
 	for (const auto& kvp : goal.satisfactions)
 	{
-		auto it = state.db.find(kvp.first);
-		if (it == state.db.end() || it->second != kvp.second)
+		if (WorldStateReadBit(state, kvp.first) != kvp.second)
 		{
 			distance += 1.0f;
 		}

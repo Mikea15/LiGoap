@@ -67,7 +67,7 @@ inline void ActionApplyEffect(const Action& action, WorldState& state)
 {
 	for (const auto& kvp : action.eff)
 	{
-		state.db[kvp.first] = kvp.second;
+		WorldStateWriteBit(state, kvp.first, kvp.second);
 	}
 }
 
@@ -75,8 +75,7 @@ inline bool ActionMeetsPreconditions(const Action& action, const WorldState& sta
 {
 	for (const auto& kvp : action.pre)
 	{
-		auto it = state.db.find(kvp.first);
-		if (it == state.db.end() || it->second != kvp.second)
+		if (WorldStateReadBit(state, kvp.first) != kvp.second)
 		{
 			return false;
 		}

@@ -2,7 +2,7 @@
 
 #pragma once
 
-enum class EKeyAtom : unsigned long {
+enum class EKeyAtom : uint64_t {
 	Empty = 0,
 
 	kTargetIsDead,

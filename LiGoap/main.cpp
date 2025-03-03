@@ -280,21 +280,23 @@ int main(int argc, char* argv[])
 	actions.push_back(&reloadWeapon);
 
 	WorldState currentState;
-	currentState.db[EKeyAtom::kTargetIsDead] = false;
-	currentState.db[EKeyAtom::kWeaponArmed] = false;
-	currentState.db[EKeyAtom::kWeaponLoaded] = false;
-	currentState.db[EKeyAtom::kAtLocation] = false;
-	currentState.db[EKeyAtom::kStamina] = true;
-	currentState.db[EKeyAtom::kHasRadio] = true;
-	currentState.db[EKeyAtom::kHasPistolAmmo] = true;
-	currentState.db[EKeyAtom::kHasRifleAmmo] = false;
-	currentState.db[EKeyAtom::kHasSniperAmmo] = false;
-	currentState.db[EKeyAtom::kHasRifle] = false;
-	currentState.db[EKeyAtom::kHasSniper] = false;
-	currentState.db[EKeyAtom::kAccuracyIncreased] = false;
-	currentState.db[EKeyAtom::kHasHighGround] = false;
-	currentState.db[EKeyAtom::kHasCover] = false;
-	currentState.db[EKeyAtom::kIsStealthy] = false;
+	WorldStateInit(currentState);
+	
+	WorldStateWriteBit(currentState, EKeyAtom::kTargetIsDead, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kWeaponArmed, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kWeaponLoaded, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kAtLocation, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kStamina, true);
+	WorldStateWriteBit(currentState, EKeyAtom::kHasRadio, true);
+	WorldStateWriteBit(currentState, EKeyAtom::kHasPistolAmmo, true);
+	WorldStateWriteBit(currentState, EKeyAtom::kHasRifleAmmo, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kHasSniperAmmo, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kHasRifle, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kHasSniper, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kAccuracyIncreased, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kHasHighGround, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kHasCover, false);
+	WorldStateWriteBit(currentState, EKeyAtom::kIsStealthy, false);
 
 	RunPlannerBenchmark(killEnemy, currentState, actions);
 
