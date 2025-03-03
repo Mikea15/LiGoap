@@ -3,6 +3,7 @@
 #pragma once
 
 #include <algorithm>
+#include <queue>
 #include <unordered_set>
 
 #include "action.h"
@@ -28,24 +29,14 @@ std::vector<Action*> Plan(const Goal& goal, const WorldState& state, const std::
 		float h; // heuristic
 		float f; // total
 	};
-
-	struct PlanNodeSort
-	{
-		bool operator()(const PlanNode& a, const PlanNode& b) const
-		{
-			return a.f > b.f;
-		}
-	};
-
-	std::vector<PlanNode> openList;
-	openList.reserve(1000);
 	
-	std::unordered_set<std::string> closedList; // Track visited states
+	const auto compare = [](const PlanNode& Left, const PlanNode& Right) -> bool { return Left.f > Right.f; };
+	std::priority_queue<PlanNode, std::vector<PlanNode>, decltype(compare)> openList(compare); // Track visited states
+	
+	std::unordered_set<WorldState> closedList; // Track visited states
 
 	// Start node
-	openList.push_back({
-		{}, state, 0.0f, 0.0, GoalDistanceToState(goal, state)
-	});
+	openList.push({ {}, state, 0, 0, GoalDistanceToState(goal, state) });
 
 	// Reuse these vectors to avoid allocations in the loop
 	std::vector<Action*> newPlan;
@@ -53,20 +44,17 @@ std::vector<Action*> Plan(const Goal& goal, const WorldState& state, const std::
 
 	while (!openList.empty())
 	{
-		// sort by f score.
-		std::sort(openList.begin(), openList.end(), PlanNodeSort());
-
-		PlanNode current = openList.back();
-		openList.erase(openList.end() - 1);
+		PlanNode current = openList.top();
+		openList.pop();
 
 		// Check if goal reached
-		if (GoalDistanceToState(goal, current.state) <= 0.0f)
+		if (GoalDistanceToState(goal, current.state) <= 0)
 		{
 			return current.plan;
 		}
 
 		// Add current state to closed list
-		std::string stateKey = WorldStateToString(current.state);
+		WorldState stateKey = current.state;
 		if (closedList.find(stateKey) != closedList.end())
 		{
 			continue;
@@ -92,7 +80,7 @@ std::vector<Action*> Plan(const Goal& goal, const WorldState& state, const std::
 				newPlan = current.plan;
 				newPlan.push_back(action);
 
-				openList.push_back({ newPlan, newState, g, h, g + h });
+				openList.push({ newPlan, newState, g, h, g + h });
 			}
 		}
 	}
