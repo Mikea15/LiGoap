@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include <algorithm>
 #include <queue>
 #include <unordered_set>
 
@@ -29,11 +28,12 @@ std::vector<Action*> Plan(const Goal& goal, const WorldState& state, const std::
 		float h; // heuristic
 		float f; // total
 	};
-	
+
+	std::vector<PlanNode> container;
+	container.reserve(1000);
 	const auto compare = [](const PlanNode& Left, const PlanNode& Right) -> bool { return Left.f > Right.f; };
-	std::priority_queue<PlanNode, std::vector<PlanNode>, decltype(compare)> openList(compare); // Track visited states
-	
-	std::unordered_set<WorldState> closedList; // Track visited states
+	std::priority_queue<PlanNode, std::vector<PlanNode>, decltype(compare)> openList(compare, std::move(container)); // Frontier
+	std::unordered_set<WorldState> closedList; // Visited States
 
 	// Start node
 	openList.push({ {}, state, 0, 0, GoalDistanceToState(goal, state) });
@@ -74,7 +74,7 @@ std::vector<Action*> Plan(const Goal& goal, const WorldState& state, const std::
 				ActionApplyEffect(*action, newState);
 
 				// Calculate Costs
-				const float g =  current.g + static_cast<float>(action->cost); // current + movement/action cost
+				const float g = current.g + static_cast<float>(action->cost); // current + movement/action cost
 				const float h = GoalDistanceToState(goal, newState);
 
 				newPlan = current.plan;

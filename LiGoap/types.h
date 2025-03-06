@@ -1,6 +1,7 @@
 // Michael Adaixo - 2025
 
 #pragma once
+#include <unordered_map>
 
 enum class EKeyAtom : uint64_t {
 	Empty = 0,
@@ -36,27 +37,46 @@ enum class EKeyAtom : uint64_t {
 	Count
 };
 
-struct Fact
+struct Symbol
 {
-	EKeyAtom Key;
-	bool value;
-
-	inline bool operator==(const Fact& Other) const { return Key == Other.Key; } 
+	union
+	{
+		float fValue;
+		int iValue;
+		bool bValue;
+		void* ptrValue = nullptr;
+	};
 };
 
-namespace std
+struct Fact
 {
-	template<>
-	struct hash<Fact>
+	EKeyAtom key;
+	Symbol value;
+
+	inline bool operator==(const Fact& Other) const { return key == Other.key; } 
+};
+
+template<>
+struct std::hash<Fact>
+{
+	size_t operator()(const Fact& fact) const noexcept
 	{
-		size_t operator()(const Fact& fact) const noexcept
-		{
-			return hash<unsigned long>()(static_cast<unsigned long>(fact.Key));
-		}
-	};
-}
+		return hash<unsigned long>()(static_cast<unsigned long>(fact.key));
+	}
+};
 
 
 using key_type = EKeyAtom;
 using key_map = std::unordered_map<key_type, bool>;
+
+struct NoCopy
+{
+protected:
+	NoCopy() = default;
+	~NoCopy() = default;
+
+private:
+	NoCopy(const NoCopy&) = delete;
+	NoCopy& operator=(const NoCopy&) = delete;
+};
 

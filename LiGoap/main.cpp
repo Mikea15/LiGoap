@@ -44,7 +44,7 @@ PlannerStats BenchmarkPlanner(const Goal& goal, const WorldState& initial_state,
 
 		for (const auto& action : actions)
 		{
-			Action* newAction = new Action(action->name, action->cost + noise(gen));
+			Action* newAction = new Action(std::string(action->name), action->cost + noise(gen));
 			newAction->eff = action->eff;
 			newAction->pre = action->pre;
 			temp_actions.push_back(newAction);
@@ -280,27 +280,27 @@ int main(int argc, char* argv[])
 	actions.push_back(&reloadWeapon);
 
 	WorldState currentState;
-	WorldStateInit(currentState);
+	BitsetInit(currentState.stateBits);
 	
-	WorldStateWriteBit(currentState, EKeyAtom::kTargetIsDead, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kWeaponArmed, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kWeaponLoaded, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kAtLocation, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kStamina, true);
-	WorldStateWriteBit(currentState, EKeyAtom::kHasRadio, true);
-	WorldStateWriteBit(currentState, EKeyAtom::kHasPistolAmmo, true);
-	WorldStateWriteBit(currentState, EKeyAtom::kHasRifleAmmo, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kHasSniperAmmo, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kHasRifle, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kHasSniper, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kAccuracyIncreased, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kHasHighGround, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kHasCover, false);
-	WorldStateWriteBit(currentState, EKeyAtom::kIsStealthy, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kTargetIsDead, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kWeaponArmed, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kWeaponLoaded, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kAtLocation, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kStamina, true);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kHasRadio, true);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kHasPistolAmmo, true);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kHasRifleAmmo, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kHasSniperAmmo, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kHasRifle, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kHasSniper, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kAccuracyIncreased, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kHasHighGround, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kHasCover, false);
+	BitsetWrite(currentState.stateBits, EKeyAtom::kIsStealthy, false);
 
 	RunPlannerBenchmark(killEnemy, currentState, actions);
 
-	WorldStatePrint(currentState);
+	BitsetPrint(currentState.stateBits);
 	std::vector<Action*> plan = Plan(killEnemy, currentState, actions);
 	PlanPrint(plan);
 	
@@ -308,7 +308,7 @@ int main(int argc, char* argv[])
 	{
 		ActionApplyEffect(*action, currentState);
 	}
-	WorldStatePrint(currentState);
+	BitsetPrint(currentState.stateBits);
 
 	return 0;
 }

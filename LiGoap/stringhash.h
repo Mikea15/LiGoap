@@ -9,6 +9,10 @@
 class StringHash
 {
 public:
+	StringHash()
+		: hash_value(INVALID)
+	{}
+	
 	template <size_t N>
 	constexpr StringHash(const char (&str)[N])
 		: hash_value(HashStr(str, N - 1))
@@ -36,7 +40,9 @@ private:
 	static constexpr uint64_t BASE = 31;
 
 	// Could be as large as 1000, but any hard coded string longer than this need a different class tbh
-	static constexpr size_t MAX_SAFE_LENGTH = 500; 
+	static constexpr size_t MAX_SAFE_LENGTH = 500;
+
+	static constexpr uint64_t INVALID = -1;
 
 	// Helper for compile-time power calculation
 	static constexpr uint64_t ComputePower(size_t exp)

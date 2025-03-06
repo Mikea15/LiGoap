@@ -3,29 +3,17 @@
 #pragma once
 
 #include <iostream>
-#include <string>
-#include <unordered_map>
 
+#include "bitset.h"
 #include "worldstate.h"
-
-struct NoCopy
-{
-protected:
-	NoCopy() = default;
-	~NoCopy() = default;
-
-private:
-	NoCopy(const NoCopy&) = delete;
-	NoCopy& operator=(const NoCopy&) = delete;
-};
 
 // ACTION: Describes preconditions and effects
 struct Action : NoCopy
 {
 	Action() = default;
-	explicit Action(const std::string& inName, int inCost)
+	explicit Action(std::string&& inName, int inCost)
 	{
-		name = inName;
+		name = std::move(inName);
 		cost = inCost;
 	}
 	// Allow move.
@@ -67,7 +55,7 @@ inline void ActionApplyEffect(const Action& action, WorldState& state)
 {
 	for (const auto& kvp : action.eff)
 	{
-		WorldStateWriteBit(state, kvp.first, kvp.second);
+		BitsetWrite(state.stateBits, kvp.first, kvp.second);
 	}
 }
 
@@ -75,7 +63,7 @@ inline bool ActionMeetsPreconditions(const Action& action, const WorldState& sta
 {
 	for (const auto& kvp : action.pre)
 	{
-		if (WorldStateReadBit(state, kvp.first) != kvp.second)
+		if (BitsetRead(state.stateBits, kvp.first) != kvp.second)
 		{
 			return false;
 		}

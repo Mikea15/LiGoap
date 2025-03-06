@@ -1,8 +1,6 @@
 // Michael Adaixo - 2025
 
 #pragma once
-#include <string>
-#include <unordered_map>
 
 #include "types.h"
 
@@ -26,7 +24,7 @@ inline float GoalDistanceToState(const Goal& goal, const WorldState& state)
 	float distance = 0.0f;
 	for (const auto& kvp : goal.satisfactions)
 	{
-		if (WorldStateReadBit(state, kvp.first) != kvp.second)
+		if (BitsetRead(state.stateBits, kvp.first) != kvp.second)
 		{
 			distance += 1.0f;
 		}

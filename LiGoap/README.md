@@ -11,6 +11,7 @@ A journey implementing a simple c GOAP
 | Gathered data for open list average size and increased reserved space               |   51 plans /s |   873 plans /s |
 | Prevent Copy of Actions. Use array of pointers. Prevent allocations.                |   84 plans /s |  1330 plans /s |
 | Change WorldState from UnorderedMap<Key, Bool> to uint64_t (used as bitset)         | 1109 plans /s | 26685 plans /s |
+| Change Priority Queue, with a container with reserved space                         | 1300 plans /s | 28888 plans /s |
 
 
 
