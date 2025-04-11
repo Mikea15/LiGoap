@@ -5,7 +5,6 @@
 #include <random>
 
 #include "planner.h"
-#include "stringhash.h"
 
 #define TEST_TIME 10
 
@@ -25,7 +24,6 @@ PlannerStats BenchmarkPlanner(const Goal& goal, const WorldState& initial_state,
 
 	size_t plans_found = 0;
 	std::vector<int> best_plan;
-	float best_cost = std::numeric_limits<float>::max();
 
 	// Keep planning until time runs out
 	while (clock::now() < end_time)
@@ -44,7 +42,7 @@ PlannerStats BenchmarkPlanner(const Goal& goal, const WorldState& initial_state,
 
 		for (const auto& action : actions)
 		{
-			Action* newAction = new Action(std::string(action->name), action->cost + noise(gen));
+			Action* newAction = new Action(std::string(action->name), action->cost + static_cast<int>(noise(gen)));
 			newAction->eff = action->eff;
 			newAction->pre = action->pre;
 			temp_actions.push_back(newAction);
@@ -72,10 +70,10 @@ void RunPlannerBenchmark(const Goal& goal, const WorldState& initial_state, cons
 {
 	auto stats = BenchmarkPlanner(goal, initial_state, actions);
 
-	std::cout << "Benchmark Results:\n"
-		<< "Total plans found: " << stats.total_plans << "\n"
-		<< "Plans per second: " << std::fixed << std::setprecision(2)
-		<< stats.plans_per_second << "\n";
+	printf("Benchmark Results\n"
+		"Total plans found: %llu\n"
+		"Plans per second: %.2f\n",
+			stats.total_plans, stats.plans_per_second);
 }
 
 int main(int argc, char* argv[])
@@ -270,7 +268,6 @@ int main(int argc, char* argv[])
 	actions.push_back(&callSupport);
 	actions.push_back(&markTarget);
 	actions.push_back(&callAirstrike);
-	// me
 	actions.push_back(&attackFromCover);
 	actions.push_back(&attack);
 	actions.push_back(&attackFromVehicle);

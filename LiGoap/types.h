@@ -37,35 +37,6 @@ enum class EKeyAtom : uint64_t {
 	Count
 };
 
-struct Symbol
-{
-	union
-	{
-		float fValue;
-		int iValue;
-		bool bValue;
-		void* ptrValue = nullptr;
-	};
-};
-
-struct Fact
-{
-	EKeyAtom key;
-	Symbol value;
-
-	inline bool operator==(const Fact& Other) const { return key == Other.key; } 
-};
-
-template<>
-struct std::hash<Fact>
-{
-	size_t operator()(const Fact& fact) const noexcept
-	{
-		return hash<unsigned long>()(static_cast<unsigned long>(fact.key));
-	}
-};
-
-
 using key_type = EKeyAtom;
 using key_map = std::unordered_map<key_type, bool>;
 

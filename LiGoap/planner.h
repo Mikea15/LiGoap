@@ -10,15 +10,15 @@
 
 inline void PlanPrint(const std::vector<Action*>& plan)
 {
-	std::cout << "Plan: \n";
+	printf("Plan: \n");
 	for (const Action* action : plan)
 	{
-		std::cout<< " -> " << action->name;
+		printf(" -> %s", action->name.c_str());
 	}
-	std::cout << "\n";
+	printf("\n");
 }
 
-std::vector<Action*> Plan(const Goal& goal, const WorldState& state, const std::vector<Action*>& actions)
+inline std::vector<Action*> Plan(const Goal& goal, const WorldState& state, const std::vector<Action*>& actions)
 {
 	struct PlanNode
 	{

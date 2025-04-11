@@ -2,9 +2,6 @@
 
 #pragma once
 
-#include <cstdint>
-#include <cstdio>
-
 #include "types.h"
 
 using bitset64_t = uint64_t;
@@ -48,7 +45,6 @@ inline bool BitsetRead(bitset64_t bitset, EKeyAtom key)
 
 inline void BitsetPrint(bitset64_t bitset)
 {
-	printf("World State: \n");
 	printf("64th Key |--- ---| 0th Key\n");
 	
 	// Print the bits from most significant to the least significant
