@@ -23,6 +23,10 @@ LiGOAP is a "little" GOAP (Goal Oriented Action Planner) implementation done as 
 | Change WorldState from UnorderedMap<Key, Bool> to uint64_t (used as bitset)         | 26685 plans /s |
 | Change Priority Queue, with a container with reserved space                         | 28888 plans /s |
 
+
+| Replace vector-based priority queue with Binary Heap | 11k -> 17k plans /s |
+| Replace vector-based binary-heap with arena allocated mem block | |
+
 ## Licence
 
 Do whatever.

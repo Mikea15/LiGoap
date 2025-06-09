@@ -7,6 +7,7 @@
 
 #include "action.h"
 #include "goal.h"
+#include "binary_heap.h"
 
 inline void PlanPrint(const std::vector<Action*>& plan)
 {
@@ -27,16 +28,18 @@ inline std::vector<Action*> Plan(const Goal& goal, const WorldState& state, cons
 		float g; // current plan
 		float h; // heuristic
 		float f; // total
+
+		bool operator<(const PlanNode& Other) const { return f < Other.f; }
+		bool operator>(const PlanNode& Other) const { return f > Other.f; }
 	};
 
-	std::vector<PlanNode> container;
-	container.reserve(1000);
-	const auto compare = [](const PlanNode& Left, const PlanNode& Right) -> bool { return Left.f > Right.f; };
-	std::priority_queue<PlanNode, std::vector<PlanNode>, decltype(compare)> openList(compare, std::move(container)); // Frontier
+	const int reserveSpace = 100;
+	BinaryHeap<PlanNode> openList(reserveSpace);
+
 	std::unordered_set<WorldState> closedList; // Visited States
 
 	// Start node
-	openList.push({ {}, state, 0, 0, GoalDistanceToState(goal, state) });
+	openList.insert({ {}, state, 0, 0, GoalDistanceToState(goal, state) });
 
 	// Reuse these vectors to avoid allocations in the loop
 	std::vector<Action*> newPlan;
@@ -44,8 +47,7 @@ inline std::vector<Action*> Plan(const Goal& goal, const WorldState& state, cons
 
 	while (!openList.empty())
 	{
-		PlanNode current = openList.top();
-		openList.pop();
+		PlanNode current = openList.extractMin();
 
 		// Check if goal reached
 		if (GoalDistanceToState(goal, current.state) <= 0)
@@ -80,7 +82,7 @@ inline std::vector<Action*> Plan(const Goal& goal, const WorldState& state, cons
 				newPlan = current.plan;
 				newPlan.push_back(action);
 
-				openList.push({ newPlan, newState, g, h, g + h });
+				openList.insert({ newPlan, newState, g, h, g + h });
 			}
 		}
 	}

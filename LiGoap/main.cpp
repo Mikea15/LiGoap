@@ -307,5 +307,6 @@ int main(int argc, char* argv[])
 	}
 	BitsetPrint(currentState.stateBits);
 
+	// getchar();
 	return 0;
 }

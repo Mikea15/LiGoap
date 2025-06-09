@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="action.h" />
+    <ClInclude Include="binary_heap.h" />
     <ClInclude Include="bitset.h" />
     <ClInclude Include="goal.h" />
     <ClInclude Include="planner.h" />
