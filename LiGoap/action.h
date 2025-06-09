@@ -21,7 +21,7 @@ struct Action : NoCopy
 	key_map pre;
 	key_map eff;
 	std::string name = {};
-	int cost = 0;
+	int8_t cost = 0;
 };
 
 inline void ActionAddPrecondition(Action& action, const key_type& key, bool value)
